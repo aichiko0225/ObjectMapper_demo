@@ -1,0 +1,49 @@
+import ObjectMapper
+
+{% for type in types.implementing.AutoMappable|struct %}
+// MARK: {{ type.name }} Mappable
+extension {{type.name}}: Mappable {
+
+    init?(map: Map) {
+        return nil
+    }
+    
+    mutating func mapping(map: Map) {
+    {% for variable in type.storedVariables %} 
+        {% if variable.type.kind == "Date" %}
+            {{variable.name}} <- map["{{variable.name}}", DateTransform()]
+        {% else %}
+            {{variable.name}} <- map["{{variable.name}}"]
+        {% endif %}
+    {% endfor %}
+    }
+}
+{% endfor %}
+
+{# {% for type in types.implementing.AutoMappable|class %}
+// MARK: {{ type.name }} Mappable
+extension {{type.name}}: Mappable {
+
+    required init?(map: Map) {
+
+    }
+    
+    func mapping(map: Map) {
+    {% for variable in type.storedVariables %} 
+        {{variable.name}} <- map["{{variable.name}}"]
+    {% endfor %}
+    }
+}
+{% endfor %} #}
+
+
+{# {% for type in types.implementing.AutoEquatable %}
+// MARK: {{ type.name }} Equatable
+extension {{type.name}}: Equatable {
+    static func ==(lhs: {{type.name}}, rhs: {{type.name}}) -> Bool {
+        {% for variable in type.storedVariables %}guard lhs.{{variable.name}} == rhs.{{variable.name}} else { return false }
+        {% endfor %}
+        return true
+    }
+}
+{% endfor %} #}
