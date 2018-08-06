@@ -10,8 +10,12 @@ extension {{type.name}}: Mappable {
     
     mutating func mapping(map: Map) {
     {% for variable in type.storedVariables %} 
-        {% if variable.type.kind == "Date" %}
-            {{variable.name}} <- map["{{variable.name}}", DateTransform()]
+        {% if variable.isArray %}
+            {{variable.name}} <- map["{{variable.name}}.0.value"]
+        {% elif variable.isDictionary %}
+            {{variable.name}} <- map["{{variable.name}}.value"]
+        {% elif variable.type.kind == "Date" %}
+            {{variable.name}} <- map["{{variable.name}}.value"]
         {% else %}
             {{variable.name}} <- map["{{variable.name}}"]
         {% endif %}

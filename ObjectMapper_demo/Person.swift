@@ -60,6 +60,8 @@ struct Person {
     var firstName: String
     var lastName: String
     var birthDate: Date
+    var friend: [String]
+    var lalala: Dictionary<String, Any>
     var age: Int {
         return Calendar.current.dateComponents([.year],
                                                from: birthDate,

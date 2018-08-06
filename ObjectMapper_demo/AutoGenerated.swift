@@ -12,8 +12,10 @@ extension Person: Mappable {
     }
     mutating func mapping(map: Map) {
             firstName <- map["firstName"]
-            lastName <- map["lastName"]
+            lastName  <- map["lastName"]
             birthDate <- map["birthDate"]
+            friend    <- map["friend.0.value"]
+            lalala    <- map["lalala.value"]
     }
 }
 
